@@ -1,0 +1,4 @@
+_target_: cmbml.utils.physics_beam.GaussianBeam
+_partial_: true  # _partial_ is a flag for Hydra. In this case, 
+                  #    lmax will come from python code
+beam_fwhm: ${model.perform_ILC_at_beam}
