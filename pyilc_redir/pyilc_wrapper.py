@@ -3,7 +3,8 @@ from . import ILCInfo, Wavelets, harmonic_ILC, wavelet_ILC
 
 def run_ilc(cfg_path):
     ilc_info = ILCInfo(input_file=cfg_path)
-    use_ilc_info(ilc_info)
+    output = use_ilc_info(ilc_info)
+    return output
 
 
 # def get_ILC_info(cfg_path):
@@ -47,7 +48,8 @@ def use_ilc_info(info):
         info.read_maps() 
         info.maps2alms()
         info.alms2cls()
-        harmonic_ILC(wv, info, resp_tol=info.resp_tol, map_images=False)
+        output = harmonic_ILC(wv, info, resp_tol=info.resp_tol, map_images=False, return_ILC_map = True)
     else:
-        wavelet_ILC(wv, info, resp_tol=info.resp_tol, map_images=False)
+        output = wavelet_ILC(wv, info, resp_tol=info.resp_tol, map_images=False, return_ILC_map = True)
+    return output
     ##########################

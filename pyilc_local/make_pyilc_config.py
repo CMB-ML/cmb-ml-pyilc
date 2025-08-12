@@ -65,12 +65,25 @@ class ILCConfigMaker:
 
         self.template = cfg_dict
 
+        self.tempalte = self.debias_preperation()
+
     def special_keys(self):
         return {
             "beam_files": self.get_beam_files,
             "beam_FWHM_arcmin": self.get_beam_fwhm_vals,
             "freq_bp_files": self.get_freq_bp_files,
         }
+
+
+
+    def debias_preperation(self):
+        updated_cfg = self.template
+
+        updated_cfg['type_of_map_2b_cleaned'] = 'half'
+        updated_cfg['dataset_name'] = self.cfg['dataset_name']
+        updated_cfg['save_weights'] = 'yes'
+        return updated_cfg
+
 
     def get_beam_files(self):
         raise NotImplementedError()
@@ -81,7 +94,7 @@ class ILCConfigMaker:
     def get_freq_bp_files(self):
         raise NotImplementedError()
 
-    def make_config(self, output_path, input_paths: List[str], mask_path=None):
+    def make_config(self, output_path, input_paths: List[str], mask_path=None, current_sim=None):
         """
         input_paths may be List[str] or List[Path]
         """
@@ -94,4 +107,6 @@ class ILCConfigMaker:
             #     we also do not include a space after the comma
             #     this works, but deviates from pyilc's instructions.
             this_template["mask_before_covariance_computation"] = f'\[{mask_path},0\]'
+        if current_sim is not None:
+            this_template['simulation'] = f'sim{current_sim:04}'
         return this_template

@@ -15,7 +15,7 @@ from cmbml.utils import make_instrument, Instrument
 from .make_pyilc_config import ILCConfigMaker
 from pyilc_redir.pyilc_wrapper import run_ilc
 from cmbml.utils.suppress_print import SuppressPrint
-
+from pyilc_redir.ilc_debias import pyilc_debias_main
 
 logger = logging.getLogger(__name__)
 
@@ -54,12 +54,19 @@ class PredictionExecutor(BaseStageExecutor):
 
     def process_split(self, 
                       split: Split) -> None:
+        
+        #n_sims is 3 for both split 1-1 and 1-10. I've been using this to correct it
+        #split.n_sims = 1
+
         logger.info(f"Executing PredictExecutor process_split() for split: {split.name}, for {split.n_sims} simulations.")
         for sim in tqdm(split.iter_sims()):
+            self.current_sim = sim
             with self.name_tracker.set_context("sim_num", sim):
                 self.process_sim()
 
     def process_sim(self) -> None:
+        current_sim = self.current_sim
+
         working_path = self.out_model.path
         working_path.mkdir(exist_ok=True, parents=True)
 
@@ -76,14 +83,22 @@ class PredictionExecutor(BaseStageExecutor):
             mask_path = None
         cfg_dict = self.model_cfg_maker.make_config(output_path=working_path,
                                                     input_paths=input_paths,
-                                                    mask_path=mask_path)
+                                                    mask_path=mask_path,
+                                                    current_sim=current_sim)
         self.out_config.write(data=cfg_dict, verbose=False)
         # logger.debug("Running PyILC Code...")
-        with SuppressPrint():
-            run_ilc(self.out_config.path)
+
+        #Can toggle between run_ilc and pyilc_debias_main with #
+        #with SuppressPrint():
+            #run_ilc(self.out_config.path)
+
         # logger.debug("Moving resulting map.")
-        self.move_result()
-        self.clear_working_directory()
+
+        pyilc_debias_main(cfg_dict)
+
+        #Pyilc_debias handles moving and clearing working directory in its own way
+        #self.move_result()
+        #self.clear_working_directory()
 
     def move_result(self):
         result_dir = self.out_model.path
