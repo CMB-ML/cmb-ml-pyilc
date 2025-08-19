@@ -12,7 +12,7 @@ defaults:
 
 dataset_name   : ${scenario.map_fields}_${scenario.nside}_${splits.name}
 #dataset_name   : CMB-ML_512_1450
-working_dir    : "PyILC_CNILC_new_install/"
+working_dir    : "PyILC_CNILC_/"
 fig_model_name : "CNILC"
 hydra:
   run:
@@ -21,6 +21,8 @@ hydra:
     dir        : Logs/${now:%Y-%m-%d-%H-%M-%S}  # Should be the same as run.dir
     subdir     : ${hydra.job.num}
   verbose      : true
+
+debias: False #if set to true will use pyilc_debias_main, not run_ilc
 
 
 # Settings below this point are used for interpolation.
@@ -39,7 +41,8 @@ use_epochs_map_stats : *epochs
 use_epochs_ps_stats  : *epochs
 
 # Limit the number of simulations for which to generate figures
-n_show_cap           : 3   # int: first n_sims; null: all sims (not recommended); list: particular sims by index
+n_show_cap           : 2   # int: first n_sims; null: all sims (not recommended); list: particular sims by index
 # Limit the number of simulations for which inference is run. In the splits yaml; null to run on all
-n_infer_cap          : 3
+n_infer_cap          : 2
 run_inference_on     : valid  # Either "test" or "valid" ("train" should work, but is not recommended)
+min_obs_beam   : null

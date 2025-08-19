@@ -23,14 +23,18 @@ if not os.path.exists(output_dir):
 signalfiles = os.listdir(signal_dir)
 noisefiles1 = os.listdir(noise_dir)
 noisefiles2 = os.listdir(noise_dir)
+
 n = len(signalfiles)
+
+if n < 2:
+    raise ValueError('Too few simulations in dataset.')
 
 #For each signal, two random noise maps are given. In any given split, the same noise map will be used twice
 random.shuffle(noisefiles1)
 random.shuffle(noisefiles2)
 shuffled_noise = noisefiles1 + noisefiles2
 
-
+print(shuffled_noise)
 if shuffled_noise[n-1] == shuffled_noise[n]:
     temp = shuffled_noise[n]
     shuffled_noise[n] = shuffled_noise[n+1]

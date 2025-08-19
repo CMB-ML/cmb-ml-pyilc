@@ -82,6 +82,7 @@ class ILCConfigMaker:
         updated_cfg['type_of_map_2b_cleaned'] = 'half'
         updated_cfg['dataset_name'] = self.cfg['dataset_name']
         updated_cfg['save_weights'] = 'yes'
+        updated_cfg['working_dir'] = self.cfg['working_dir']
         return updated_cfg
 
 

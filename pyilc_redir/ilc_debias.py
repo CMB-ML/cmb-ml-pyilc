@@ -26,19 +26,22 @@ class Pyilc_Debias:
 
         self.sim_number = self.cfg_input['simulation']
         
-        #Will automatically run half mission soon
+        working_dir = self.cfg_input['working_dir']
+
         if not os.path.exists(self.datasetdir+self.datasetfolder):
             raise FileNotFoundError('Need to run half_mission_construction!')
 
-        self.working_folder = f"{self.datasetdir}Pyilc_Working/"
+        self.working_folder = f"{self.datasetdir}{working_dir}NILC_A_Working_Dir/"
         if not os.path.exists(self.working_folder):
             print("Creating Working Folder")
             os.makedirs(self.working_folder)
 
-        self.output_folder = f"{self.datasetdir}Pyilc_Output_{self.sim_number}a/"
+        self.output_folder = f"{self.datasetdir}{working_dir}NILC_C_Debias/{self.sim_number}/"
         if not os.path.exists(self.output_folder):
             print("Creating Output Folder")
             os.makedirs(self.output_folder)
+
+        #Need to read units from map metadata soon
 
         # if 'units' in self.cfg_input.keys():
         #     if self.cfg_input['units'] == 'K':
@@ -91,9 +94,13 @@ class Pyilc_Debias:
         else:
             self.datasimfolder = simulation_dir+sim+'/'
 
-        self.outputsim_folder = f"{self.output_folder}{sim}/"
+        if self.input_type == 'noise':
+            super_folder = 'weighted_noise/'
+        else:
+            super_folder = ''
 
-
+        self.outputsim_folder = f"{self.output_folder}{super_folder}{sim}/"
+    
         print(self.outputsim_folder)
         if not os.path.exists(self.outputsim_folder):
             os.makedirs(self.outputsim_folder)
@@ -110,7 +117,6 @@ class Pyilc_Debias:
         print('Begin cleaning')
 
         clean = run_ilc(self.sim_cfg)
-        print('CLEAN!!:',clean)
 
         hp.fitsfunc.write_map(f"{self.outputsim_folder}{self.input_type}.fits",clean,overwrite=True)
 

@@ -39,6 +39,7 @@ class PredictionExecutor(BaseStageExecutor):
         in_deltabandpass_handler: QTableHandler
 
         in_det_table: Asset = self.assets_in['deltabandpass']
+
         # with self.name_tracker.set_context("src_root", cfg.local_system.assets_dir):
         #     planck_bandpass = self.in_deltabandpass.read()
         with self.name_tracker.set_context('src_root', cfg.local_system.assets_dir):
@@ -48,6 +49,8 @@ class PredictionExecutor(BaseStageExecutor):
         self.channels = self.instrument.dets.keys()
 
         self.model_cfg_maker = ILCConfigMaker(cfg, det_info)
+
+        self.debias_flag = cfg['debias']
 
     def execute(self) -> None:
         self.default_execute()
@@ -88,17 +91,15 @@ class PredictionExecutor(BaseStageExecutor):
         self.out_config.write(data=cfg_dict, verbose=False)
         # logger.debug("Running PyILC Code...")
 
-        #Can toggle between run_ilc and pyilc_debias_main with #
-        #with SuppressPrint():
-            #run_ilc(self.out_config.path)
-
-        # logger.debug("Moving resulting map.")
-
-        pyilc_debias_main(cfg_dict)
-
-        #Pyilc_debias handles moving and clearing working directory in its own way
-        #self.move_result()
-        #self.clear_working_directory()
+        #Can toggle between debias and regular ilc using debias key in cfg
+        if self.debias_flag:
+            pyilc_debias_main(cfg_dict)
+        else:
+            with SuppressPrint():
+                run_ilc(self.out_config.path)
+            # logger.debug("Moving resulting map.")
+            self.move_result()
+            self.clear_working_directory()
 
     def move_result(self):
         result_dir = self.out_model.path
