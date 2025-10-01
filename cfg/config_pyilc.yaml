@@ -10,8 +10,13 @@ defaults:
   - model/beam                : pyilc_beam
   - override hydra/job_logging: custom_log
 
-dataset_name   : ${scenario.map_fields}_${scenario.nside}_${splits.name}
-#dataset_name   : CMB-ML_512_1450
+
+model:
+  sim:
+    noise:
+      n_planck_noise_sims: 1
+# dataset_name   : ${scenario.map_fields}_${scenario.nside}_${splits.name}
+dataset_name   : I_512_1750_d1_0rg
 working_dir    : "PyILC_CNILC/"
 fig_model_name : "CNILC"
 hydra:
@@ -22,7 +27,7 @@ hydra:
     subdir     : ${hydra.job.num}
   verbose      : true
 
-debias: False #if set to true will use pyilc_debias_main, not run_ilc
+debias: true #if set to true will use pyilc_debias_main, not run_ilc
 
 
 # Settings below this point are used for interpolation.
@@ -41,8 +46,8 @@ use_epochs_map_stats : *epochs
 use_epochs_ps_stats  : *epochs
 
 # Limit the number of simulations for which to generate figures
-n_show_cap           : 2   # int: first n_sims; null: all sims (not recommended); list: particular sims by index
+n_show_cap           : 1   # int: first n_sims; null: all sims (not recommended); list: particular sims by index
 # Limit the number of simulations for which inference is run. In the splits yaml; null to run on all
-n_infer_cap          : 2
+n_infer_cap          : 1
 run_inference_on     : valid  # Either "test" or "valid" ("train" should work, but is not recommended)
 min_obs_beam   : null
