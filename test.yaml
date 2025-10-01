@@ -1,0 +1,53 @@
+work_in_car: false
+ELLMAX: 1024
+ILC_bias_tol: 0.001
+ILC_deproj_comps: []
+ILC_preserved_comp: CMB
+# N_deproj: 0
+N_freqs: 8
+# N_scales: 4
+N_side: 512
+# bandpass_type: DeltaBandpasses
+beam_FWHM_arcmin:
+- 65.0
+- 55.0
+- 43.0
+- 32.4
+- 22.3
+- 22.0
+- 21.5
+- 20.6
+# beam_type: Gaussians
+ellmin: 0
+ellpeaks:
+- 200
+- 715
+- 1025
+freq_map_files:
+- /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation/Valid/sim0000/obs_44_map.fits
+- /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation/Valid/sim0000/obs_70_map.fits
+- /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation/Valid/sim0000/obs_100_map.fits
+- /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation/Valid/sim0000/obs_143_map.fits
+- /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation/Valid/sim0000/obs_217_map.fits
+- /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation/Valid/sim0000/obs_353_map.fits
+- /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation/Valid/sim0000/obs_545_map.fits
+- /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation/Valid/sim0000/obs_857_map.fits
+freqs_delta_ghz:
+- 44
+- 70
+- 100
+- 143
+- 217
+- 353
+- 545
+- 857
+mask_before_covariance_computation: /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation_Mask/mask.fits
+# output_dir: /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/PyILC_CNILC_new_install/NILC_A_Working_Dir/
+# output_prefix: CN_
+# output_suffix: ''
+# override_ILCbiastol_threshold: 'False'
+perform_ILC_at_beam: 20.6
+# save_as: fits
+# save_weights: 'no'
+# taper_width: 0
+# wavelet_type: CosineNeedlets
