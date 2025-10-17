@@ -42,6 +42,7 @@ freqs_delta_ghz:
 - 545
 - 857
 mask_before_covariance_computation: /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation_Mask/mask.fits
+mask_before_wavelet_computation: /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/Simulation_Mask/mask.fits
 # output_dir: /data/jim/CMB_Data/Datasets/I_512_1750_d1_0rg/PyILC_CNILC_new_install/NILC_A_Working_Dir/
 # output_prefix: CN_
 # output_suffix: ''

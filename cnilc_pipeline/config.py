@@ -26,10 +26,14 @@ class Config:
 
     # Masks & I/O
     mask_before_covariance_computation: Optional[str] = None  # path to FITS (or None)
+    mask_before_wavelet_computation: Optional[str] = None  # path to FITS (or None)
     output_path: str = "./cnilc_out.fits"
 
     work_in_car: bool = False
     work_in_healpix: bool = True
+
+    remove_dipole: bool = False
+    final_mask: Optional[str] = None
 
     @classmethod
     def from_yaml(cls, path: str) -> "Config":
