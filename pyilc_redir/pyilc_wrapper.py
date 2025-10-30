@@ -1,4 +1,5 @@
-from . import ILCInfo, Wavelets, harmonic_ILC, wavelet_ILC
+from pyilc.input import ILCInfo
+from pyilc.wavelets import Wavelets, harmonic_ILC, wavelet_ILC
 
 
 def run_ilc(cfg_path):

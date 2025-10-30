@@ -38,7 +38,7 @@ def main(cfg):
 
     pipeline_context = PipelineContext(cfg, log_maker)
 
-    pipeline_context.add_pipe(HydraConfigCheckerExecutor)
+    # pipeline_context.add_pipe(HydraConfigCheckerExecutor)
     pipeline_context.add_pipe(MaskCreatorExecutor)
     pipeline_context.add_pipe(PredictionExecutor)
 

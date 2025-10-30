@@ -4,15 +4,15 @@ defaults:
   - file_system               : common_fs
   - pipeline                  : assembly_pyilc
   - scenario                  : scenario
-  - splits                    : all  # If you aren't getting as many results as expected, check n_infer_cap as well
+  - splits                    : one_sim  # If you aren't getting as many results as expected, check n_infer_cap as well
   - model                     : cnilc_512
   - model/analysis            : basic_analysis
   - model/beam                : pyilc_beam
   - override hydra/job_logging: custom_log
 
 # dataset_name   : ${scenario.map_fields}_${scenario.nside}_${splits.name}
-dataset_name   : CMB-ML_512_1450
-working_dir    : "PyILC_CNILC_new_install/"
+dataset_name   : I_512_1550
+working_dir    : "PyILC_CNILC_helpppppp/"
 fig_model_name : "CNILC"
 hydra:
   run:
@@ -39,7 +39,7 @@ use_epochs_map_stats : *epochs
 use_epochs_ps_stats  : *epochs
 
 # Limit the number of simulations for which to generate figures
-n_show_cap           : 3   # int: first n_sims; null: all sims (not recommended); list: particular sims by index
+n_show_cap           : 1   # int: first n_sims; null: all sims (not recommended); list: particular sims by index
 # Limit the number of simulations for which inference is run. In the splits yaml; null to run on all
-n_infer_cap          : 3
+n_infer_cap          : 1
 run_inference_on     : valid  # Either "test" or "valid" ("train" should work, but is not recommended)
