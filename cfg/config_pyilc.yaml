@@ -11,8 +11,8 @@ defaults:
   - override hydra/job_logging: custom_log
 
 # dataset_name   : ${scenario.map_fields}_${scenario.nside}_${splits.name}
-dataset_name   : CMB-ML_512_1450
-working_dir    : "PyILC_CNILC_new_install/"
+dataset_name   : I_512_1550
+working_dir    : "PyILC_CNILC/"
 fig_model_name : "CNILC"
 hydra:
   run:
@@ -42,4 +42,4 @@ use_epochs_ps_stats  : *epochs
 n_show_cap           : 3   # int: first n_sims; null: all sims (not recommended); list: particular sims by index
 # Limit the number of simulations for which inference is run. In the splits yaml; null to run on all
 n_infer_cap          : 3
-run_inference_on     : valid  # Either "test" or "valid" ("train" should work, but is not recommended)
+run_inference_on     : test  # Either "test" or "valid" ("train" should work, but is not recommended)
