@@ -1,0 +1,44 @@
+defaults:
+  - assembly_planck_as_sim
+  # Mostly, use pipeline for simulations:
+  - pipe_model_pyilc
+  - pipe_model_analysis
+  # Adjustments needed:
+  - _self_
+
+preprocess:
+  assets_in:
+    # Pull maps from Planck Dir
+    cmb_map:
+      dataset: ${planck_ds}
+    obs_maps:
+      dataset: ${planck_ds}
+    dataset_stats:
+      working: ${trained_wd}
+  dir_name: D_Prep_Observs_Planck
+  # There is only the "Test" split
+  splits: &test_only
+    - test
+
+predict:
+  splits: *test_only
+
+postprocess: &final_inference
+  assets_in:
+    dataset_stats:
+      working: ${trained_wd}
+  splits: *test_only
+
+final_infer: *final_inference  # Used so that analysis code can find a consistent name
+
+show_predictions:
+  assets_out:
+    fig:
+      # Change file name
+      path_template: "{root}/{dataset}/{working}{stage}/planck_predictions_{epoch}.{fig_type}"
+  assets_in:
+    ps_thry:
+      dataset: ${planck_ds}
+
+ps_analysis:
+  dir_name: Analysis_H_PS_Report_Planck
