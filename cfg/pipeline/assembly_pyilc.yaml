@@ -5,7 +5,7 @@ defaults:
   - pipe_model_analysis
 
 # This has neither preprocess nor postprocess. 
-#   Redirect those to predict.
+#   Redirect those to make_sims.
 #   TODO: something better
 preprocess: ${pipeline.make_sims}
 postprocess: ${pipeline.make_sims}
