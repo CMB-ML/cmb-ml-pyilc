@@ -1,3 +1,5 @@
+defaults:
+  - analysis/beam_type: pyilc_beam
 # Note that this config has placeholders commented out.
 # PYTHON section are variables set in the Python code, generally from other hydra configs
 # GLOBAL PYILC: nothing noteworthy
