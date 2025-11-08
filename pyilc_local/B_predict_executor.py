@@ -11,7 +11,7 @@ from cmbml.core.asset_handlers import (
     HealpyMap,
     QTableHandler 
     )
-from cmbml.utils import make_instrument, Instrument
+from cmbml.utils.planck_instrument import make_instrument, Instrument
 from .make_pyilc_config import ILCConfigMaker
 from pyilc_redir.pyilc_wrapper import run_ilc
 from cmbml.utils.suppress_print import SuppressPrint
