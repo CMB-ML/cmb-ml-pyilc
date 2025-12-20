@@ -80,6 +80,7 @@ class PredictionExecutor(BaseStageExecutor):
                 # Convert to string; we're going to convert this information to a yaml file
                 input_paths.append(str(path))
 
+        #self.in_mask = None
         if self.in_mask is not None:
             mask_path = self.in_mask.path
         else:

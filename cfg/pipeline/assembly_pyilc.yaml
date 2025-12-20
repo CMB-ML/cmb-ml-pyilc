@@ -9,3 +9,8 @@ defaults:
 #   TODO: something better
 preprocess: ${pipeline.make_sims}
 postprocess: ${pipeline.make_sims}
+raw:
+  assets_out:
+    deltabandpass:
+      handler: QTable
+      path_template: "{src_root}/Planck/planck_deltabandpass.tbl"

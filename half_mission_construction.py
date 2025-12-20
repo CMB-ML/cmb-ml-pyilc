@@ -1,12 +1,13 @@
 import os
 import healpy as hp
-import processing as pros
+import pyilc_local.processing as pros
 import random
 #work in progress script to turn one simulation into two half mission simulations provided there are noise only simulations.
 
 ##Make sure datasetdir of choice has a working folder with both Sky Emission map and Noise only maps.
 
-dataset_name = 'I_512_1-10'
+dataset_name = 'I_512_1-10_monopole'
+freqs = [30,44,70,100,143,217,353,545,857]
 
 datasetdir = f"{os.getenv('CMB_ML_DATA')}/Datasets/{dataset_name}/"
 
@@ -40,7 +41,6 @@ if shuffled_noise[n-1] == shuffled_noise[n]:
     shuffled_noise[n] = shuffled_noise[n+1]
     shuffled_noise[n+1] = temp
 
-freqs = [44,70,100,143,217,353,545]
 
 for i in range(len(signalfiles)):
 
