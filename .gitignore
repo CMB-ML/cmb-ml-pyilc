@@ -17,3 +17,5 @@ junk.py
 junk*.py
 junk.ipynb
 junk*.ipynb
+
+*.fits

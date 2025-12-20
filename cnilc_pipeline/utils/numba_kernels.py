@@ -19,6 +19,7 @@ def batched_det(A: np.ndarray) -> np.ndarray:
 
 def solve_weights_numba(Sigma: np.ndarray, a: np.ndarray) -> np.ndarray:
     if _jit_linsolve is None and _jit_linsolve_parallelb is None:
+        print("Using backup solve_weights_numba()")
         inv_Sa = np.linalg.solve(Sigma, a)
         alpha = float(a.T @ inv_Sa)
         return (inv_Sa / alpha).reshape(-1)

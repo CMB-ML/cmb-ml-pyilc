@@ -5,7 +5,9 @@ import numpy as np
 from .config import Config
 from .executors.A_waveletize import WaveletizeExecutor
 from .executors.B_covariance import CovarianceExecutor
+from .executors.B2_sigma import SigmaExecutor
 from .executors.C_weights import WeightsExecutor
+# from .executors.C_weights_no_numba import WeightsExecutor2
 from .executors.D_prediction import PredictionExecutor
 from cnilc_pipeline.utils.gaussian_utils import compute_fwhm_pix_per_scale, compute_fwhm_pix_per_scale_pyilc_style
 
@@ -57,7 +59,9 @@ def run_pipeline(cfg: Config, out_dir: str = "outputs") -> np.ndarray:
     freqs_to_use = wave.needlets.freqs_to_use
 
     cov_exec = CovarianceExecutor(cfg, mask)
+    sigma_exec = SigmaExecutor(cfg)
     w_exec = WeightsExecutor(cfg)
+    # w_exec = WeightsExecutor2(cfg)
 
     Sigmas = []
     weights = []
@@ -90,40 +94,36 @@ def run_pipeline(cfg: Config, out_dir: str = "outputs") -> np.ndarray:
                         fwhm_deg=fwhm_pix_deg,
                         orig_idxs=active_per_scale[s],
                     )
-        # Sigmas.append(Sigma)
 
-        # Save each element of covariance as FITS (per freq pair) with ORIGINAL channel ids
-        if active_per_scale:
-            orig_idxs = active_per_scale[s]
-        else:
-            orig_idxs = list(range(len(coeffs_at_scale)))
-        for (i_orig, j_orig), prod_map in prod_maps.items():
-            fname = os.path.join(
-                out_dir,
-                f"CN__needletcoeff_covmap_freq{i_orig}_freq{j_orig}_scale{s}.fits"
-            )
-            hp.write_map(fname, prod_map, overwrite=True, dtype=np.float64)
+        Sigma_s, active_global_s = sigma_exec.run(
+            cov_maps_done=prod_maps,
+            freqs_to_use_row=freqs_to_use[s],
+            orig_idxs=orig_idxs
+        )
 
-    #     # Solve weights using ONLY the active freqs for this scale
-    #     w = w_exec.run(Sigma, active_freq_indices=orig_idxs)
-    #     weights.append(w)
+        active_freq = active_per_scale[s]
+        # W_s, cleaned_s = w_exec.run(
 
-    #     includechannels = ''.join(str(i) for i in orig_idxs)
-    #     fname = os.path.join(out_dir, f"CN_needletILCmap_scale{s}_component_{cfg.ILC_preserved_comp}_includechannels{includechannels}.fits")
-    #     # Construct ILC map at this scale from active coeffs
-    #     X = np.vstack(coeffs_at_scale).T  # (n_pix, n_active)
-    #     y = X @ w  # (n_pix,)
-    #     hp.write_map(fname, y, overwrite=True, dtype=np.float64)
+        # )
+        w = w_exec.run(Sigma_s, active_freq_indices=orig_idxs)
+        weights.append(w)
 
-    # # Final cleaned map (all scales combined)
-    # pred = PredictionExecutor(cfg, wave.needlets)
-    # cleaned_map = pred.run(coeffs_per_scale, weights)
+        includechannels = ''.join(str(i) for i in orig_idxs)
+        fname = os.path.join(out_dir, f"CN_needletILCmap_scale{s}_component_{cfg.ILC_preserved_comp}_includechannels{includechannels}.fits")
+        # Construct ILC map at this scale from active coeffs
+        X = np.vstack(coeffs_at_scale).T  # (n_pix, n_active)
+        y = X @ w  # (n_pix,)
+        hp.write_map(fname, y, overwrite=True, dtype=np.float64)
 
-    # final_name = os.path.join(out_dir, f"CN_needletILCmap_component_{cfg.ILC_preserved_comp}.fits")
-    # hp.write_map(final_name, cleaned_map, overwrite=True, dtype=np.float64)
-    # hp.write_map(cfg.output_path, cleaned_map, overwrite=True, dtype=np.float64)
+    # Final cleaned map (all scales combined)
+    pred = PredictionExecutor(cfg, wave.needlets)
+    cleaned_map = pred.run(coeffs_per_scale, weights)
 
-    # return cleaned_map
+    final_name = os.path.join(out_dir, f"CN_needletILCmap_component_{cfg.ILC_preserved_comp}.fits")
+    hp.write_map(final_name, cleaned_map, overwrite=True, dtype=np.float64)
+    hp.write_map(cfg.output_path, cleaned_map, overwrite=True, dtype=np.float64)
+
+    return cleaned_map
 
 
 # def run_pipeline(cfg: Config, out_dir: str = "outputs") -> np.ndarray:
