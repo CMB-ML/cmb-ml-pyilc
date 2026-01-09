@@ -28,6 +28,7 @@ class PredictionExecutor(BaseStageExecutor):
         self.out_config: Asset = self.assets_out["config_file"]
         self.out_model: Asset = self.assets_out["model"]
         self.out_cmb_asset: Asset = self.assets_out["cmb_map"]
+        self.out_weight_dir_asset: Asset = self.assets_out["weight_dir"]
         out_config_handler: Config
         out_model_handler: EmptyHandler
         out_cmb_map_handler: HealpyMap
@@ -83,6 +84,7 @@ class PredictionExecutor(BaseStageExecutor):
             run_ilc(self.out_config.path)
         # logger.debug("Moving resulting map.")
         self.move_result()
+        self.move_weights()
         self.clear_working_directory()
 
     def move_result(self):
@@ -98,8 +100,17 @@ class PredictionExecutor(BaseStageExecutor):
 
         result_path.rename(destination_path)
 
+    def move_weights(self):
+        result_dir = self.out_model.path
+        result_ext = self.cfg.model.save_as
+        weight_pattern = f"CN_weightmap_freq*_scale*_component_CMB.{result_ext}"
+        for weight_path in result_dir.glob(weight_pattern):
+            weight_fn = weight_path.name
+            destination_path = self.out_weight_dir_asset.path / weight_fn
+            weight_path.rename(destination_path)
+
     def clear_working_directory(self):
-        working_path = self.out_model.path
-        for file in working_path.iterdir():
-            file.unlink()
+        # working_path = self.out_model.path
+        # for file in working_path.iterdir():
+        #     file.unlink()
         return

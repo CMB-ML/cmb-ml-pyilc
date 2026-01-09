@@ -25,7 +25,7 @@ beam_FWHM_arcmin: "{beam_fwhm_values}"
 output_prefix: 'CN_'                             # the prefix for all the files that will be saved
 output_suffix: ''                                # the suffix for all the files that will be saved
 save_as: 'fits'
-save_weights: 'no'                               # set to yes to save the weight maps
+save_weights: 'yes'                               # set to yes to save the weight maps
 ELLMAX: 1024                                     # Pull from the higher level config. Value set to maximum used in PyILC for this nside
 perform_ILC_at_beam: 20.6                        # Choose this based on ???
 ILC_preserved_comp: 'CMB'
