@@ -33,8 +33,8 @@ def run_pyilc(cfg):
     logger.debug(f"Running train in {__file__}")
     pipes = [
             #  HydraConfigCheckerExecutor,
-            # MaskCreatorExecutor,
-            # PredictionExecutor,
+            MaskCreatorExecutor,
+            PredictionExecutor,
             PyILCMakePSExecutor
             ]
     run(cfg, pipes)
@@ -44,7 +44,7 @@ def run_pyilc(cfg):
 def run_on_planck(cfg):
     logger.debug(f"Running train in {__file__}")
     pipes = [
-            #  PredictionExecutor,
+             PredictionExecutor,
              PyILCMakePSExecutor
              ]
     run(cfg, pipes)
@@ -71,4 +71,4 @@ def run(cfg, pipes):
 
 if __name__ == "__main__":
     run_pyilc()
-    # run_on_planck()
+    run_on_planck()
