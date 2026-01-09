@@ -2,7 +2,6 @@
 defaults:
   - config_pyilc
   - override pipeline: assembly_on_planck
-  - override splits: "1-1"
   - _self_
 
 working_dir        : "PyILC_on_Planck/"
@@ -10,3 +9,4 @@ fig_model_name     : "PyILC, On Planck"
 
 planck_ds: PlanckAsDataset_${scenario.nside}
 trained_wd: "PyILC_CNILC/"
+n_infer_cap: 1
