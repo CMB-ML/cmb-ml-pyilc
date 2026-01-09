@@ -4,7 +4,7 @@ defaults:
   - file_system               : common_fs
   - pipeline                  : assembly_pyilc
   - scenario                  : scenario
-  - splits                    : all  # If you aren't getting as many results as expected, check n_infer_cap as well
+  - splits                    : new_all  # If you aren't getting as many results as expected, check n_infer_cap as well
   - model                     : cnilc_512
   - model/analysis            : basic_analysis
   - model/beam                : pyilc_beam
@@ -12,7 +12,7 @@ defaults:
 
 # dataset_name   : ${scenario.map_fields}_${scenario.nside}_${splits.name}
 dataset_name   : I_512_1550
-working_dir    : "PyILC_CNILC/"
+working_dir    : "PyILC_CNILC_Test/"
 fig_model_name : "CNILC"
 hydra:
   run:
@@ -22,13 +22,16 @@ hydra:
     subdir     : ${hydra.job.num}
   verbose      : true
 
+model:
+  analysis:
+    lmax_ratio : 2
 
 # Settings below this point are used for interpolation.
 # These are not to be used directly in python.
 # They are picked up from here and MAY be used elsewhere in the yamls. Be careful, check assumptions!
 # In the scenario yaml
 nside          : 512
-detectors      : [44, 70, 100, 143, 217, 353, 545, 857]
+detectors      : [100, 143, 217, 353]
 map_fields     : "I"
 
 # In the pipeline yamls
@@ -41,5 +44,5 @@ use_epochs_ps_stats  : *epochs
 # Limit the number of simulations for which to generate figures
 n_show_cap           : 3   # int: first n_sims; null: all sims (not recommended); list: particular sims by index
 # Limit the number of simulations for which inference is run. In the splits yaml; null to run on all
-n_infer_cap          : null
+n_infer_cap          : 1
 run_inference_on     : test  # Either "test" or "valid" ("train" should work, but is not recommended)
