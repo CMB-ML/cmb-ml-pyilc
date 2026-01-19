@@ -33,6 +33,10 @@ model:
     include_cmb: false
     nside_sky: 2048
 
+splits:
+  Debias:
+    n_sims: 10
+
 # Settings below this point are used for interpolation.
 # These are not to be used directly in python.
 # They are picked up from here and MAY be used elsewhere in the yamls. Be careful, check assumptions!
