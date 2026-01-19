@@ -8,21 +8,19 @@ from astropy import units as u
 
 class ILCConfigMaker:
     def __init__(self, cfg, deltabandpass, use_dets=None) -> None:
-        # TODO: Remove this! Get the parameters here instead of storing the whole cfg.
-        self.cfg = cfg
-        
         self.deltabandpass = deltabandpass
         self.use_dets = use_dets
         self.detector_freqs: List[int] = None
         self.bandwidths: List[float] = None
-        self.set_ordered_detectors()
-        self.ilc_cfg_hydra_yaml = self.cfg.model
+        self.nside = cfg.scenario.nside
+        self.set_ordered_detectors(cfg)
+        self.ilc_cfg_hydra_yaml = cfg.model.pyilc
         self.template = {}
         self.compose_template()
 
-    def set_ordered_detectors(self) -> None:
+    def set_ordered_detectors(self, cfg) -> None:
         if self.use_dets is None:
-            detector_freqs = self.cfg.scenario.detector_freqs
+            detector_freqs = cfg.scenario.detector_freqs
         else:
             detector_freqs = self.use_dets
         band_strs = {det: f"{det}" for det in detector_freqs}
@@ -38,13 +36,13 @@ class ILCConfigMaker:
         # Convert OmegaConf to dictionary for later use with yaml library write()
         ilc_cfg = self.ilc_cfg_hydra_yaml
         ilc_cfg = OmegaConf.to_container(ilc_cfg, resolve=True)
-        distinct_cfg = OmegaConf.to_container(self.cfg.model.distinct, resolve=True)
+        distinct_cfg = OmegaConf.to_container(self.ilc_cfg_hydra_yaml.distinct, resolve=True)
 
         # Get items set in the common configurations
         cfg_dict = dict(
             freqs_delta_ghz = self.detector_freqs,
             N_freqs = len(self.detector_freqs),
-            N_side = self.cfg.scenario.nside,
+            N_side = self.nside,
         )
 
         ignore_keys = ["config_maker", "distinct"]
@@ -93,5 +91,8 @@ class ILCConfigMaker:
             #     we escape [] for now and fix it in the write() method
             #     we also do not include a space after the comma
             #     this works, but deviates from pyilc's instructions.
-            this_template["mask_before_covariance_computation"] = f'\[{mask_path},0\]'
+            this_template["mask_before_covariance_computation"] = rf'\[{mask_path},0\]'
+
+            # The \[ and \] trigger syntax warnings. I think they're acceptable?
+            # this_template["mask_before_covariance_computation"] = f'\[{mask_path},0\]'
         return this_template
