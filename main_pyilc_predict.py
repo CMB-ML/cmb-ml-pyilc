@@ -18,12 +18,24 @@ import hydra
 
 # from cmbml.utils.check_env_var import validate_environment_variable
 from cmbml.core import (
-                      PipelineContext,
-                      LogMaker
-                      )
-from cmbml.sims import MaskCreatorExecutor
+    PipelineContext,
+    LogMaker
+    )
 from cmbml.core.A_check_hydra_configs import HydraConfigCheckerExecutor
-from pyilc_local.B_predict_executor import PredictionExecutor
+from cmbml.sims import (
+    MaskCreatorExecutor, 
+    HalfMissionNoiseExecutor,
+    SimHMCreatorExecutor
+    )
+from pyilc_local.B_predict_executor import (
+    GetILCWeightsExecutor,
+    ApplyWeightsExecutor
+    )
+from pyilc_local.G_fg_only_maps import (
+    MakeDebiasFGCfgExecutor, 
+    MakeDebiasFGMapExecutor
+    )
+from pyilc_local.J_ps_with_debias import DebiasPredPowerSpectrumExecutor
 
 
 logger = logging.getLogger(__name__)
@@ -40,7 +52,13 @@ def main(cfg):
 
     # pipeline_context.add_pipe(HydraConfigCheckerExecutor)
     pipeline_context.add_pipe(MaskCreatorExecutor)
-    pipeline_context.add_pipe(PredictionExecutor)
+    pipeline_context.add_pipe(HalfMissionNoiseExecutor)
+    pipeline_context.add_pipe(SimHMCreatorExecutor)
+    pipeline_context.add_pipe(MakeDebiasFGCfgExecutor)
+    pipeline_context.add_pipe(MakeDebiasFGMapExecutor)
+    pipeline_context.add_pipe(GetILCWeightsExecutor)
+    pipeline_context.add_pipe(ApplyWeightsExecutor)
+    pipeline_context.add_pipe(DebiasPredPowerSpectrumExecutor)
 
     pipeline_context.prerun_pipeline()
 

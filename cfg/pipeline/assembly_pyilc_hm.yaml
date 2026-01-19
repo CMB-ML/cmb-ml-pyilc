@@ -1,0 +1,137 @@
+defaults:
+  - assembly_sim_flex
+  - pipe_model_analysis
+  - _self_
+
+# This has neither preprocess nor postprocess. 
+#   Redirect those to make_sims.
+#   TODO: something better
+preprocess: ${pipeline.make_sims}
+postprocess: ${pipeline.make_sims}
+
+make_hm_noise:
+  assets_out:
+    noise_maps:
+      handler: HealpyMap
+      path_template: "{root}/{dataset}/{working}{stage}/{split}/{sim}/noise_{freq}_map_hm{hm}.fits"
+      path_template_alt: "{root}/{dataset}/{working}{stage}/{split}/noise_{freq}_map_hm{hm}.fits"
+  assets_in:
+    deltabandpass: {stage: raw}
+    planck_deltabandpass: {stage: raw}
+    scale_cache: 
+      stage: make_noise_cache 
+      working: &sw ${sim_work}
+    noise_model: {stage: make_noise_models}
+    noise_avg:   {stage: make_planck_noise_sims_avgs}
+  dir_name: Simulation_E2_HM_Noise
+  splits: &test
+    - test
+  make_stage_log: False
+
+make_hm_sims:
+  assets_out:
+    obs_maps:
+      handler: HealpyMap
+      path_template: "{root}/{dataset}/{stage}/{split}/{sim}/obs_{freq}_map_hm{hm}.fits"
+  assets_in:
+    noise_maps: {stage: make_hm_noise}
+    sky_no_noise_maps: {stage: make_obs_no_noise, working: *sw}
+  dir_name: Simulation_HM_Maps
+  splits: *test
+  make_stage_log: False
+  top_level_working: True
+
+make_debias_fg_cfgs:  # This pipe uses the ForegroundConfigExecutor pipe 
+  assets_out:
+    fg_config:
+      handler: Config
+      path_template: "{root}/{dataset}/{working}{stage}/{sim}/fg_params.yaml"
+      path_template_alt: null  # Needed for pipe re-use
+  splits:
+    - debias
+  dir_name: Simulation_G_FG_Debias_Configs
+  make_stage_log: False
+
+make_debias_fg_maps:  # This pipe uses the ObsCreatorExecutor pipe 
+  assets_out:
+    sky_no_noise_maps:  # Need to keep the name used in ObsCreatorExecutor
+      handler: HealpyMap
+      # path_template: "{root}/{dataset}/{working}{stage}/{sim}/fg_{freq}_map.fits"  <-- USE THIS
+      path_template: "{root}/{dataset}/{working}{stage}/{sim}/{freq}_const_fg.fits"
+      path_template_alt: null  # Needed for pipe re-use
+  assets_in:
+    fg_maps: 
+      stage: pysm_fg_prep
+      working: *sw
+    fg_config: {stage: make_debias_fg_cfgs}
+    deltabandpass: {stage: raw}
+    lfi_rimo: {stage: raw}
+    hfi_rimo: {stage: raw}
+  splits:
+    - debias
+  dir_name: Simulation_H_FG_Debias_Maps
+
+make_weights:
+  assets_out:
+    model: 
+      handler: EmptyHandler
+      path_template: "{root}/{dataset}/{working}NILC_A_Working_Dir/"
+    config_file: 
+      handler: Config
+      path_template: "{root}/{dataset}/{working}{stage}/config_all_dets.yaml"
+    cmb_map: 
+      handler: HealpyMap
+      path_template: "{root}/{dataset}/{working}{stage}/{split}/{sim}/cmb_pred.fits"
+    weight_dir:
+      handler: Config
+      path_template: "{root}/{dataset}/{working}{stage}/{split}/{sim}/"
+  assets_in:
+    obs_maps: {stage: make_sims}
+    deltabandpass: {stage: raw}
+    mask: {stage: make_mask}  # Remove or set to null for no masking
+  splits:
+    - ${splits.run_inference_on}
+  dir_name: NILC_I_Weights
+  make_stage_log: True
+
+apply_weights:
+  assets_out:
+    model: 
+      handler: EmptyHandler
+      path_template: "{root}/{dataset}/{working}NILC_A_Working_Dir/"
+    config_file: 
+      handler: Config
+      path_template: "{root}/{dataset}/{working}{stage}/config_all_dets.yaml"
+    hm_wtd: 
+      handler: HealpyMap
+      path_template: "{root}/{dataset}/{working}{stage}/{split}/{sim}/cmb_pred_hm{hm}.fits"
+    fg_wtd: 
+      handler: HealpyMap
+      path_template: "{root}/{dataset}/{working}{stage}/{split}/{sim}/fg_wtd_{fg_sim}.fits"
+  assets_in:
+    obs_maps: {stage: make_hm_sims}
+    deltabandpass: {stage: raw}
+    mask: {stage: make_mask}  # Remove or set to null for no masking
+    weight_dir: {stage: make_weights}
+    fg_maps: {stage: make_debias_fg_maps, orig_name: sky_no_noise_maps}
+  splits:
+    - ${splits.run_inference_on}
+    - debias
+  dir_name: NILC_J_Applied_Weights
+  make_stage_log: True
+
+make_pred_ps_with_debias:
+  assets_out:
+    auto_pred:
+      path_template: "{root}/{dataset}/{working}{stage}/{split}/{sim}/ps_pred_{epoch}.npy"
+      handler: NumpyPowerSpectrum
+  assets_in:
+    cmb_hm_map: {stage: apply_weights, orig_name: hm_wtd}
+    fg_map: {stage: apply_weights, orig_name: fg_wtd}
+    mask:    {stage: make_mask}
+    mask_sm: {stage: make_mask}
+  splits:
+    - ${splits.run_inference_on}
+    - debias
+  epochs: ${use_epochs_ps_stats}
+  dir_name: Analysis_K_Power_Spectra
