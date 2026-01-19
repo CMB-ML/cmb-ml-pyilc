@@ -1,5 +1,3 @@
-defaults:
-  - analysis/beam_type: pyilc_beam
 # Note that this config has placeholders commented out.
 # PYTHON section are variables set in the Python code, generally from other hydra configs
 # GLOBAL PYILC: nothing noteworthy
@@ -25,8 +23,8 @@ beam_FWHM_arcmin: "{beam_fwhm_values}"
 output_prefix: 'CN_'                             # the prefix for all the files that will be saved
 output_suffix: ''                                # the suffix for all the files that will be saved
 save_as: 'fits'
-save_weights: 'yes'                               # set to yes to save the weight maps
-ELLMAX: 1024                                     # Pull from the higher level config. Value set to maximum used in PyILC for this nside
+save_weights: 'yes'                              # set to yes to save the weight maps
+ELLMAX: 1280                                     # Pull from the higher level config. Value set to maximum used in PyILC for this nside
 perform_ILC_at_beam: 20.6                        # Choose this based on ???
 ILC_preserved_comp: 'CMB'
 ILC_bias_tol: 0.001
@@ -56,10 +54,10 @@ distinct:
   wavelet_type: 'CosineNeedlets'                   # This "chooses" the CNILC method
   ellmin: 0
 
-  N_scales: 4
+  N_scales: 5
   # ellpeaks values found by (1) holding largest at 1280 and bracketing smallest 
   #                          (2) holding smallest at 200 and bracketing largest
   #                          (3) holding extremes and bracketing middle
   #                          (4) adding more ellpeaks (no benefit)
   # Full search history at commit 149f5dfe
-  ellpeaks: [200, 715, 1025]
+  ellpeaks: [200, 715, 1025, 1281]
