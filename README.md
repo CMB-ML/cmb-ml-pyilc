@@ -2,7 +2,7 @@ This repo is a work-in-progress attempt to hold the PyILC portion of CMB-ML, sep
 
 # Installation
 
-## Short version:
+<!-- ## Short version:
 
 - Download the CMB-ML repository
     - `git clone git@github.com:CMB-ML/cmb-ml.git`
@@ -18,8 +18,8 @@ This repo is a work-in-progress attempt to hold the PyILC portion of CMB-ML, sep
   - Set your CMB_ML_DATA environment variable, and ensure that the directory exists
     - E.g., `export CMB_ML_DATA=/data/jim/CMB_Data`
   - In pyilc_redir, edit the `__init__.py` file to point to the directory containing your local installation of pyilc (containing the pyilc `inputs.py` and `wavelets.py`)
-
-## Installation instructions (full):
+ -->
+<!-- ## Installation instructions (full):
 
 - Download the CMB-ML repository
     - `git clone git@github.com:CMB-ML/cmb-ml.git`
@@ -53,4 +53,32 @@ This repo is a work-in-progress attempt to hold the PyILC portion of CMB-ML, sep
   - If you are not creating simulations, you only need one external science asset: "COM_CMB_IQU-nilc_2048_R3.00_full.fits" (for the mask)
   - Scripts are available in the `get_data` folder, which will download all files.
     - [Downloads from original sources](./get_data/get_assets.py) gets files from the official sources (and the CMB-ML files from this repo)
-    - If you prefer to download fewer files, adjust [this executor](get_data/stage_executors/A_get_assets.py) (not recommended)
+    - If you prefer to download fewer files, adjust [this executor](get_data/stage_executors/A_get_assets.py) (not recommended) -->
+
+- Assuming you install all your repos in the same directory, e.g. `~/repos/`
+    - Go to that folder `cd ~/repos`
+- Get the latest PySM3
+    - The version installed by conda is a few updates behind, including one that fixes a bug in CMBLensed
+    - If not yet acquired:
+        - `cd ~/repos`
+        - `git clone https://github.com/galsci/pysm.git`
+    - If acquired, update it:
+        - `cd ~/repos/pysm`
+        - `git pull`
+- Download the CMB-ML repository
+    - `cd ~/repos` (or whatever top-level repo folder you use)
+    - `git clone git@github.com:CMB-ML/cmb-ml.git`
+    - `cd cmb-ml`
+    - `git switch whatever`
+- Download this repository
+- From within this repository
+  - still required due to either namaster or torch... this could be fixed soon, possibly
+  - `conda env create -f env.yaml`
+  - To change the name of the environment, edit the file or use a different command.
+- From within the CMB-ML repo
+  - `pip install .`
+- From within the PySM3 repo
+  - `pip install .`
+- From within the PyILC repo
+  - `pip install -e .`
+  - NOTE: MUST BE INSTALLED IN EDITABLE MODE. If not installed this way, there will be errors about missing yml files.

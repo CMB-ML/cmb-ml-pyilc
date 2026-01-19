@@ -31,6 +31,7 @@ ILC_bias_tol: 0.001
 N_deproj: 0                                      # The PyILC methods can extract components other than the CMB. 
                                                  #    This parameters is the number of those other components.
 taper_width: 0                                   # The scientific backing of this is unknown; default is 200
+work_in_healpix: 'yes'
 
 # override_N_freqs_to_use: [8,8,8,8,8,8]  # ,4,4,3,3]
 
