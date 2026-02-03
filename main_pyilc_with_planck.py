@@ -67,8 +67,8 @@ def run_pyilc(cfg):
 def run_on_planck(cfg):
     logger.debug(f"Running train in {__file__}")
     pipes = [
-            ObsMapsConvertExecutor,
-            ObsHMMapsConvertExecutor,
+            # ObsMapsConvertExecutor,
+            # ObsHMMapsConvertExecutor,
             GetILCWeightsExecutor,
             ApplyWeightsExecutor,
             DebiasPredPowerSpectrumExecutor,
