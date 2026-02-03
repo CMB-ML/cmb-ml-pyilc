@@ -1,8 +1,13 @@
 # Do not name any yamls "default", "null", or "basic": these are reserved and will cause issues!
 defaults:
   - config_pyilc
+  - override splits: "1-1"
+  - override model/sim: sim_planck_as_sim
   - override pipeline: assembly_on_planck
   - _self_
+
+splits:
+  name: 1850
 
 working_dir        : "PyILC_on_Planck/"
 fig_model_name     : "PyILC, On Planck"

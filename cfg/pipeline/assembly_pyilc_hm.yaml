@@ -6,8 +6,8 @@ defaults:
 # This has neither preprocess nor postprocess. 
 #   Redirect those to make_sims.
 #   TODO: something better
-preprocess: ${pipeline.make_sims}
-postprocess: ${pipeline.make_sims}
+# preprocess: ${pipeline.make_sims}
+# postprocess: ${pipeline.make_sims}
 
 make_hm_noise:
   assets_out:
@@ -127,9 +127,9 @@ make_pred_ps_with_debias:
       handler: NumpyPowerSpectrum
   assets_in:
     cmb_hm_map: {stage: apply_weights, orig_name: hm_wtd}
-    fg_map: {stage: apply_weights, orig_name: fg_wtd}
-    mask:    {stage: make_mask}
-    mask_sm: {stage: make_mask}
+    fg_map:     {stage: apply_weights, orig_name: fg_wtd}
+    mask:       {stage: make_mask}
+    mask_sm:    {stage: make_mask}
   splits:
     - ${splits.run_inference_on}
     - debias

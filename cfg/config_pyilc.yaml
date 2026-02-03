@@ -5,7 +5,7 @@ defaults:
   - scenario                  : scenario
   - splits                    : all  # If you aren't getting as many results as expected, check n_infer_cap as well
   - model/pyilc               : cnilc_512
-  - model/sim                 : sim_flex_fgs
+  # - model/sim                 : sim_flex_fgs  # TODO: Try without this; remove if ok. Change from override in config_pyilc_on_planck
   - model/analysis            : basic_analysis
   - model/beam                : pyilc_beam
   - override hydra/job_logging: custom_log

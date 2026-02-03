@@ -21,8 +21,26 @@ from cmbml.core import (
                       )
 from cmbml.sims import MaskCreatorExecutor
 from cmbml.core.A_check_hydra_configs import HydraConfigCheckerExecutor
-from pyilc_local.B_predict_executor import PredictionExecutor
-from pyilc_local.C_make_ps import PyILCMakePSExecutor
+# from pyilc_local.B_predict_executor import UsePyILCExecutor
+# from pyilc_local.C_make_ps import PyILCMakePSExecutor
+from cmbml.sims import (
+    MaskCreatorExecutor, 
+    HalfMissionNoiseExecutor,
+    SimHMCreatorExecutor
+    )
+from cmbml.planck_as_sim import (
+    ObsMapsConvertExecutor, 
+    ObsHMMapsConvertExecutor
+    )
+from pyilc_local.B_predict_executor import (
+    GetILCWeightsExecutor,
+    ApplyWeightsExecutor
+    )
+from pyilc_local.G_fg_only_maps import (
+    MakeDebiasFGCfgExecutor, 
+    MakeDebiasFGMapExecutor
+    )
+from pyilc_local.J_ps_with_debias import DebiasPredPowerSpectrumExecutor
 
 
 logger = logging.getLogger(__name__)
@@ -32,10 +50,15 @@ logger = logging.getLogger(__name__)
 def run_pyilc(cfg):
     logger.debug(f"Running train in {__file__}")
     pipes = [
-            #  HydraConfigCheckerExecutor,
+            # HydraConfigCheckerExecutor,
             MaskCreatorExecutor,
-            PredictionExecutor,
-            PyILCMakePSExecutor
+            HalfMissionNoiseExecutor,
+            SimHMCreatorExecutor,
+            MakeDebiasFGCfgExecutor,
+            MakeDebiasFGMapExecutor,
+            GetILCWeightsExecutor,
+            ApplyWeightsExecutor,
+            DebiasPredPowerSpectrumExecutor,
             ]
     run(cfg, pipes)
 
@@ -44,9 +67,12 @@ def run_pyilc(cfg):
 def run_on_planck(cfg):
     logger.debug(f"Running train in {__file__}")
     pipes = [
-             PredictionExecutor,
-             PyILCMakePSExecutor
-             ]
+            ObsMapsConvertExecutor,
+            ObsHMMapsConvertExecutor,
+            GetILCWeightsExecutor,
+            ApplyWeightsExecutor,
+            DebiasPredPowerSpectrumExecutor,
+            ]
     run(cfg, pipes)
 
 
@@ -70,5 +96,5 @@ def run(cfg, pipes):
 
 
 if __name__ == "__main__":
-    run_pyilc()
+    # run_pyilc()
     run_on_planck()
