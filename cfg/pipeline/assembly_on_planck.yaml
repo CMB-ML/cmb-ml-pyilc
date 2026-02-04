@@ -19,7 +19,7 @@ make_weights:
   assets_in:
     obs_maps:
       dataset: ${planck_ds}
-  dir_name: NILC_I_Weights_Planck
+  dir_name: NILC_I_Weights
 
 apply_weights:
   assets_in:
@@ -27,7 +27,7 @@ apply_weights:
       dataset: ${planck_ds}
     fg_maps:
       working: ${trained_wd}
-  dir_name: NILC_J_Applied_Weights_Planck
+  dir_name: NILC_J_Applied_Weights
 
 make_pred_ps_with_debias:
-  dir_name: Analysis_K_Power_Spectra_Planck
+  dir_name: Analysis_K_Power_Spectra
