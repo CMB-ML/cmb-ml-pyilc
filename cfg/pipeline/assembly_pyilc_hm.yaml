@@ -89,8 +89,7 @@ make_weights:
     obs_maps: {stage: make_sims}
     deltabandpass: {stage: raw}
     mask: {stage: make_mask}  # Remove or set to null for no masking
-  splits:
-    - ${splits.run_inference_on}
+  splits: ${splits.run_inference_on}
   dir_name: NILC_I_Weights
   make_stage_log: True
 
@@ -118,9 +117,7 @@ apply_weights:
     mask: {stage: make_mask}  # Remove or set to null for no masking
     weight_dir: {stage: make_weights}
     fg_maps: {stage: make_debias_fg_maps, orig_name: sky_no_noise_maps}
-  splits:
-    - ${splits.run_inference_on}
-    - debias
+  splits: ${append:${splits.run_inference_on},debias}
   dir_name: NILC_J_Applied_Weights
   make_stage_log: True
 
@@ -134,8 +131,6 @@ make_pred_ps_with_debias:
     fg_map:     {stage: apply_weights, orig_name: fg_wtd}
     mask:       {stage: make_mask}
     mask_sm:    {stage: make_mask}
-  splits:
-    - ${splits.run_inference_on}
-    - debias
+  splits: ${append:${splits.run_inference_on},debias}
   epochs: ${use_epochs_ps_stats}
   dir_name: Analysis_K_Power_Spectra

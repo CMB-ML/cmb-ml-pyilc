@@ -52,7 +52,7 @@ class DebiasPredPowerSpectrumExecutor(BaseStageExecutor):
 
         # Prepare to load beam (in execute())
         # beam_type is either "beam_pyilc" or "beam_other"
-        self.beam_pred = cfg.model.beam
+        self.beam_pred = cfg.model.analysis.beam_type
 
         self.use_pixel_weights = False
 

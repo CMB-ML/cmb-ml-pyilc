@@ -21,6 +21,13 @@ from functools import partial
 import logging
 
 import hydra
+from omegaconf import OmegaConf
+
+
+OmegaConf.register_new_resolver(
+    "append", lambda items, item: list(items) + [item]
+)
+
 
 # from cmbml.utils.check_env_var import validate_environment_variable
 from cmbml.core import (
@@ -48,6 +55,7 @@ from cmbml.analysis.ex import (
                             # # ShowOnePSExecutor,
                             # PostAnalysisPsFigExecutor
                             )
+
 
 logger = logging.getLogger(__name__)
 
