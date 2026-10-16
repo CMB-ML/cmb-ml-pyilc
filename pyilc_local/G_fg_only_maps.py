@@ -9,7 +9,7 @@ import pysm3.units as u
 
 from cmbml.utils.planck_instrument import make_instrument, Instrument
 from cmbml.core import BaseStageExecutor, Split, Asset
-from cmbml.sims import ObsCreatorExecutor, ForegroundConfigExecutor
+from cmbml.sims.ex import ObsCreatorExecutor, ForegroundConfigExecutor
 
 from cmbml.core.asset_handlers.qtable_handler import QTableHandler # Import to register handler
 from cmbml.core.asset_handlers.healpy_map_handler import HealpyMap # Import for VS Code hints
