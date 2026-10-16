@@ -28,16 +28,16 @@ from cmbml.core import (
                       LogMaker
                       )
 from cmbml.core.A_check_hydra_configs import HydraConfigCheckerExecutor
-from cmbml.sims import MaskCreatorExecutor
+from cmbml.sims.ex import MaskCreatorExecutor
 
-from cmbml.analysis import   (
+from cmbml.analysis.ex import (
                             # NILCShowSimsPostExecutor,
                             CommonRealPostExecutor,
                             CommonPredPostExecutor,
-                            CommonShowSimsPostExecutor,
+                            # CommonShowSimsPostExecutor,
                             # # CommonNILCShowSimsPostIndivExecutor,
-                            PixelAnalysisExecutor,
-                            PixelSummaryExecutor,
+                            # PixelAnalysisExecutor,
+                            # PixelSummaryExecutor,
                             # ConvertTheoryPowerSpectrumExecutor,
                             # MakeTheoryPSStats,
                             # # PyILCMakePSExecutor,
@@ -62,20 +62,20 @@ def main(cfg):
 
     pipeline_context = PipelineContext(cfg, log_maker)
 
-    pipeline_context.add_pipe(HydraConfigCheckerExecutor)
+    # pipeline_context.add_pipe(HydraConfigCheckerExecutor) # Checks for train in the pipeline YAML. TODO: Remove or fix.
 
     # In the following, "Common" means "Apply the same postprocessing to all models"; requires a mask
     # Apply to the target (CMB realization)
     pipeline_context.add_pipe(CommonRealPostExecutor)
     pipeline_context.add_pipe(CommonPredPostExecutor)
 
-    # # Show results of cleaning
-    pipeline_context.add_pipe(CommonShowSimsPostExecutor)  # Temporary fix
-    # pipeline_context.add_pipe(CommonNILCShowSimsPostIndivExecutor)  # NOT DONE
+    # # # Show results of cleaning
+    # pipeline_context.add_pipe(CommonShowSimsPostExecutor)  # Temporary fix
+    # # pipeline_context.add_pipe(CommonNILCShowSimsPostIndivExecutor)  # NOT DONE
 
-    pipeline_context.add_pipe(PixelAnalysisExecutor)
-    pipeline_context.add_pipe(PixelSummaryExecutor)
-    # pipeline_context.add_pipe(PixelSummaryFigsExecutor)  # NOT DONE
+    # pipeline_context.add_pipe(PixelAnalysisExecutor)
+    # pipeline_context.add_pipe(PixelSummaryExecutor)
+    # # pipeline_context.add_pipe(PixelSummaryFigsExecutor)  # NOT DONE
 
     # # # Not needed in every analysis pipeline, but needed in one
     # pipeline_context.add_pipe(ConvertTheoryPowerSpectrumExecutor)  # NOT DONE

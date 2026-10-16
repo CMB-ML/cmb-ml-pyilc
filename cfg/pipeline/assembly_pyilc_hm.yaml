@@ -94,6 +94,10 @@ make_weights:
   dir_name: NILC_I_Weights
   make_stage_log: True
 
+final_infer:
+  assets_out:
+    cmb_map: ${pipeline.make_weights.assets_out.cmb_map}
+
 apply_weights:
   assets_out:
     model: 
