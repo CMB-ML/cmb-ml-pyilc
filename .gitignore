@@ -3,6 +3,7 @@ creation_logs/
 Logs/
 Data/
 outputs/
+outputs*/
 multirun/
 
 # Ignore local system files
