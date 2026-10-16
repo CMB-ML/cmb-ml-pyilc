@@ -118,6 +118,7 @@ class GetILCWeightsExecutor(UsePyILCExecutor):
     def __init__(self, cfg, stage_str="make_weights"):
         super().__init__(cfg, stage_str)
         self.out_weight_dir_asset: Asset = self.assets_out["weight_dir"]
+        self.out_cmb_map: Asset = self.assets_out["cmb_map"]
     
     def process_sim(self):
         input_paths = []
@@ -126,6 +127,13 @@ class GetILCWeightsExecutor(UsePyILCExecutor):
                 path = self.in_obs_assets.path
                 input_paths.append(str(path))
         self.process_sim_base(input_paths)
+
+        # Save the full-mission CMB prediction
+        destination_path = self.out_cmb_map.path
+        destination_path.parent.mkdir(exist_ok=True, parents=True)
+        self.move_cmb_pred(destination_path)
+
+        # Save the weights
         self.move_weights()
         self.clear_working_directory()
 
