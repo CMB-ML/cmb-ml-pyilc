@@ -51,14 +51,14 @@ def main(cfg):
     pipeline_context = PipelineContext(cfg, log_maker)
 
     # pipeline_context.add_pipe(HydraConfigCheckerExecutor)
-    pipeline_context.add_pipe(MaskCreatorExecutor)
-    pipeline_context.add_pipe(HalfMissionNoiseExecutor)
-    pipeline_context.add_pipe(SimHMCreatorExecutor)
-    pipeline_context.add_pipe(MakeDebiasFGCfgExecutor)
-    pipeline_context.add_pipe(MakeDebiasFGMapExecutor)
+    # pipeline_context.add_pipe(MaskCreatorExecutor)
+    # pipeline_context.add_pipe(HalfMissionNoiseExecutor)
+    # pipeline_context.add_pipe(SimHMCreatorExecutor)
+    # pipeline_context.add_pipe(MakeDebiasFGCfgExecutor)
+    # pipeline_context.add_pipe(MakeDebiasFGMapExecutor)
     pipeline_context.add_pipe(GetILCWeightsExecutor)
-    pipeline_context.add_pipe(ApplyWeightsExecutor)
-    pipeline_context.add_pipe(DebiasPredPowerSpectrumExecutor)
+    # pipeline_context.add_pipe(ApplyWeightsExecutor)
+    # pipeline_context.add_pipe(DebiasPredPowerSpectrumExecutor)
 
     pipeline_context.prerun_pipeline()
 
