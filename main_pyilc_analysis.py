@@ -39,8 +39,12 @@ from cmbml.sims.ex import MaskCreatorExecutor
 
 from cmbml.analysis.ex import (
                             # NILCShowSimsPostExecutor,
-                            CommonRealPostExecutor,
+                            # CommonRealPostExecutor,
                             CommonPredPostExecutor,
+        PixelAnalysisExecutor,
+        PixelSummaryExecutor,
+        PixelSummaryFigsExecutor,
+
                             # CommonShowSimsPostExecutor,
                             # # CommonNILCShowSimsPostIndivExecutor,
                             # PixelAnalysisExecutor,
@@ -74,16 +78,16 @@ def main(cfg):
 
     # In the following, "Common" means "Apply the same postprocessing to all models"; requires a mask
     # Apply to the target (CMB realization)
-    pipeline_context.add_pipe(CommonRealPostExecutor)
+    # pipeline_context.add_pipe(CommonRealPostExecutor)
     pipeline_context.add_pipe(CommonPredPostExecutor)
 
     # # # Show results of cleaning
     # pipeline_context.add_pipe(CommonShowSimsPostExecutor)  # Temporary fix
     # # pipeline_context.add_pipe(CommonNILCShowSimsPostIndivExecutor)  # NOT DONE
 
-    # pipeline_context.add_pipe(PixelAnalysisExecutor)
-    # pipeline_context.add_pipe(PixelSummaryExecutor)
-    # # pipeline_context.add_pipe(PixelSummaryFigsExecutor)  # NOT DONE
+    pipeline_context.add_pipe(PixelAnalysisExecutor)
+    pipeline_context.add_pipe(PixelSummaryExecutor)
+    pipeline_context.add_pipe(PixelSummaryFigsExecutor)
 
     # # # Not needed in every analysis pipeline, but needed in one
     # pipeline_context.add_pipe(ConvertTheoryPowerSpectrumExecutor)  # NOT DONE
