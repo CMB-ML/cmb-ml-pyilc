@@ -3,6 +3,7 @@ import shutil
 from typing import List
 from tqdm import tqdm
 
+from astropy.io import fits
 from omegaconf import DictConfig
 
 from cmbml.core import BaseStageExecutor, Split, Asset
@@ -53,6 +54,8 @@ class UsePyILCExecutor(BaseStageExecutor):
         self.result_prefix = cfg.model.pyilc.output_prefix
         self.result_ext = cfg.model.pyilc.save_as
 
+        self.map_unit = cfg.scenario.units
+
     def execute(self) -> None:
         self.default_execute()
 
@@ -71,6 +74,20 @@ class UsePyILCExecutor(BaseStageExecutor):
 
         result_path = result_dir / result_fn
         result_path.rename(destination_path)
+
+        # PyILC does not preserve unit metadata in its output FITS maps.
+        # Restore units without modifying the map data.
+        with fits.open(destination_path, mode="update") as hdul:
+            for hdu in hdul:
+                if isinstance(hdu, (fits.BinTableHDU, fits.TableHDU)):
+                    for col_idx in range(1, len(hdu.columns) + 1):
+                        hdu.header[f"TUNIT{col_idx}"] = self.map_unit
+
+                elif isinstance(hdu, (fits.PrimaryHDU, fits.ImageHDU)):
+                    if hdu.data is not None:
+                        hdu.header["BUNIT"] = self.map_unit
+
+            hdul.flush()
 
     def clear_working_directory(self):
         working_path = self.out_model.path
