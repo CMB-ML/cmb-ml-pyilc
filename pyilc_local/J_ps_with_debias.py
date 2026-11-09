@@ -130,7 +130,8 @@ class DebiasPredPowerSpectrumExecutor(BaseStageExecutor):
             )
             fg_ps_s.append(this_ps.deconv_dl)
 
-        fg_ps = np.mean(fg_ps_s, axis=0)
+        # Units are dropped when using np.mean; reapply them
+        fg_ps = np.mean(fg_ps_s, axis=0) * fg_ps_s[0].unit
 
         ps = hm_x_pred_ps - fg_ps
 
