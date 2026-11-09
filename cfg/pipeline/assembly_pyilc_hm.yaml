@@ -26,7 +26,7 @@ make_hm_noise:
   dir_name: Simulation_E2_HM_Noise
   splits: &test
     - test
-  make_stage_log: False
+  make_stage_log: True
 
 make_hm_sims:
   assets_out:
@@ -38,7 +38,7 @@ make_hm_sims:
     sky_no_noise_maps: {stage: make_obs_no_noise, working: *sw}
   dir_name: Simulation_HM_Maps
   splits: *test
-  make_stage_log: False
+  make_stage_log: True
   top_level_working: True
 
 make_debias_fg_cfgs:  # This pipe uses the ForegroundConfigExecutor pipe 
@@ -50,15 +50,13 @@ make_debias_fg_cfgs:  # This pipe uses the ForegroundConfigExecutor pipe
   splits:
     - debias
   dir_name: Simulation_G_FG_Debias_Configs
-  make_stage_log: False
+  make_stage_log: True
 
 make_debias_fg_maps:  # This pipe uses the ObsCreatorExecutor pipe 
   assets_out:
     sky_no_noise_maps:  # Need to keep the name used in ObsCreatorExecutor
       handler: HealpyMap
-      # path_template: "{root}/{dataset}/{working}{stage}/{sim}/fg_{freq}_map.fits"  <-- USE THIS
       path_template: "{root}/{dataset}/{working}{stage}/{sim}/{freq}_const_fg.fits"
-      path_template_alt: null  # Needed for pipe re-use
   assets_in:
     fg_maps: 
       stage: pysm_fg_prep
@@ -70,6 +68,7 @@ make_debias_fg_maps:  # This pipe uses the ObsCreatorExecutor pipe
   splits:
     - debias
   dir_name: Simulation_H_FG_Debias_Maps
+  make_stage_log: True
 
 make_weights:
   assets_out:
