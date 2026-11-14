@@ -1,84 +1,74 @@
-This repo is a work-in-progress attempt to hold the PyILC portion of CMB-ML, separately from the rest. 
+# CMB-ML: PyILC
 
-# Installation
+This repository implements the NILC component separation method used with the [CMB-ML](https://github.com/CMB-ML/cmb-ml) framework, using the CNILC implementation provided by [PyILC](https://github.com/jcolinhill/pyilc).
 
-<!-- ## Short version:
+It includes the code and configurations for prediction and analysis, as well as instructions for reproducing the CNILC results from the Direct-to-Power-Spectrum ([D2PS](https://github.com/CMB-ML/e-d2ps)) paper, including half-mission cross-power spectrum
+estimation and foreground debiasing.
 
-- Download the CMB-ML repository
-    - `git clone git@github.com:CMB-ML/cmb-ml.git`
-    - `cd cmb-ml`
-    - `git switch whatever` (dev-rm-pyilc)
-    - Follow the README instructions there
-- Get [PyILC](https://github.com/jcolinhill/pyilc)
-  - Simply clone the repository
-  - No installation is needed, CMB-ML runs the code as its own
-  - This was run and tested with [the version from April 30, 2024](https://github.com/jcolinhill/pyilc/tree/7ced3ec392a520977b3c672a2a7af62064dcc296)
-- Configure your local system
-  - See [Setting up your environment](https://github.com/CMB-ML/cmb-ml-tutorials/blob/main/C_setting_up_local.ipynb) for more information
-  - Set your CMB_ML_DATA environment variable, and ensure that the directory exists
-    - E.g., `export CMB_ML_DATA=/data/jim/CMB_Data`
-  - In pyilc_redir, edit the `__init__.py` file to point to the directory containing your local installation of pyilc (containing the pyilc `inputs.py` and `wavelets.py`)
- -->
-<!-- ## Installation instructions (full):
+## Installation
 
-- Download the CMB-ML repository
-    - `git clone git@github.com:CMB-ML/cmb-ml.git`
-    - `cd cmb-ml`
-    - `git switch whatever` (dev-rm-pyilc)
-- Create the conda environment 
-    - remove old conda installations (and Poetry... which can be gotten rid of as a whole)
-        - `conda remove -n cmb-ml --all`
-    - still required due to either namaster or torch... this could be fixed soon, possibly
-    - `conda env create -f env.yaml`
-    - To change the name of the environment, edit the file or use a different command.
-- Activate the conda environment
-    - `conda activate cmb-ml`
-- Install CMB-ML
-    - `which pip` (ensure that the response is within the conda environment)
-    - `pip install .`
-- Get [PyILC](https://github.com/jcolinhill/pyilc)
-  - Simply clone the repository
-  - No installation is needed, CMB-ML runs the code as its own
-  - This was run and tested with [the version from April 30, 2024](https://github.com/jcolinhill/pyilc/tree/7ced3ec392a520977b3c672a2a7af62064dcc296)
-- Configure your local system
-  - See [Setting up your environment](https://github.com/CMB-ML/cmb-ml-tutorials/blob/main/C_setting_up_local.ipynb) for more information
-  - Set your CMB_ML_DATA environment variable, and ensure that the directory exists
-    - E.g., `export CMB_ML_DATA=/data/jim/CMB_Data`
-  - In pyilc_redir, edit the `__init__.py` file to point to the directory containing your local installation of pyilc (containing the pyilc `inputs.py` and `wavelets.py`)
-- Download some external science assets and the CMB-ML assets
-  - See [Setting up your environment](https://github.com/CMB-ML/cmb-ml-tutorials/blob/main/C_setting_up_local.ipynb) for more information
-  - External science assets include Planck's observations maps (from which we get information for producing noise) and Planck's NILC prediction map (for the mask; NILC is a parameter)
-  - These are available from the original sources and a mirror set up for this purpose
-  - CMB-ML assets include the substitute detector information and information required for downloading datasets
-  - If you are not creating simulations, you only need one external science asset: "COM_CMB_IQU-nilc_2048_R3.00_full.fits" (for the mask)
-  - Scripts are available in the `get_data` folder, which will download all files.
-    - [Downloads from original sources](./get_data/get_assets.py) gets files from the official sources (and the CMB-ML files from this repo)
-    - If you prefer to download fewer files, adjust [this executor](get_data/stage_executors/A_get_assets.py) (not recommended) -->
+Follow the installation instructions in the [CMB-ML repository](https://github.com/CMB-ML/cmb-ml), using release `v0.3.0-d2ps`.
 
-- Assuming you install all your repos in the same directory, e.g. `~/repos/`
-    - Go to that folder `cd ~/repos`
-- Get the latest PySM3
-    - The version installed by conda is a few updates behind, including one that fixes a bug in CMBLensed
-    - If not yet acquired:
-        - `cd ~/repos`
-        - `git clone https://github.com/galsci/pysm.git`
-    - If acquired, update it:
-        - `cd ~/repos/pysm`
-        - `git pull`
-- Download the CMB-ML repository
-    - `cd ~/repos` (or whatever top-level repo folder you use)
-    - `git clone git@github.com:CMB-ML/cmb-ml.git`
-    - `cd cmb-ml`
-    - `git switch whatever`
-- Download this repository
-- From within this repository
-  - still required due to either namaster or torch... this could be fixed soon, possibly
-  - `conda env create -f env.yaml`
-  - To change the name of the environment, edit the file or use a different command.
-- From within the CMB-ML repo
-  - `pip install .`
-- From within the PySM3 repo
-  - `pip install .`
-- From within the PyILC repo
-  - `pip install -e .`
-  - NOTE: MUST BE INSTALLED IN EDITABLE MODE. If not installed this way, there will be errors about missing yml files.
+With the CMB-ML conda environment activated, clone and install the required version of PyILC:
+
+```bash
+git clone https://github.com/jcolinhill/pyilc.git
+cd pyilc
+git switch --detach f527e35fc6ab738d1a3c2724daab62430e35cc12
+python -m pip install pixell==0.32.7
+python -m pip install -e .
+cd ..
+```
+
+PyILC must be installed in editable mode to ensure that required YAML files are accessible.
+
+Clone this repository:
+
+```bash
+git clone https://github.com/CMB-ML/cmb-ml-pyilc.git
+cd cmb-ml-pyilc
+git switch --detach v0.2.0-d2ps
+python -m pip check
+```
+
+## Data Preparation
+
+To reproduce the results reported in the D2PS paper, use the `I_512_1850_UnifWMAP_Wide` dataset, which can be obtained by following the data preparation instructions in the CMB-ML repository.
+
+In addition to the simulated observations, the PyILC pipeline requires the noise model and intermediate simulation products. These are included in the distributed dataset.
+
+Ensure that the `CMB_ML_DATA` environment variable is set as described in the CMB-ML documentation.
+
+The default configuration, `cfg/config_pyilc.yaml`, is set up to use this dataset.
+
+## Running PyILC
+
+To reproduce the CNILC predictions and debiased power spectra used in the D2PS paper, run:
+
+```bash
+python main_pyilc_predict.py
+```
+
+The pipeline generates half-mission observations and foreground debiasing realizations, computes CNILC weights, applies the weights, and estimates the debiased power spectra.
+
+By default, the pipeline runs on the validation and test splits.
+
+To test the pipeline on a smaller number of simulations per split, use the `n_infer_cap` configuration option:
+
+```bash
+python main_pyilc_predict.py n_infer_cap=12
+```
+
+The default working directory within the dataset is `PyILC_CNILC/`. The resulting power spectra are stored in `PyILC_CNILC/Analysis_K_Power_Spectra/` within the dataset directory. Further post-processing (polynomial fitting) is applied in D2PS.
+
+## Attribution
+
+If you use this repository in your research, please cite the relevant publications:
+
+- **NILC method:** [J. Delabrouille, J.-F. Cardoso, M. Le Jeune, et al. 2009, A&A, 493, 835–857](https://doi.org/10.1051/0004-6361:200810514).
+- **PyILC implementation:** [Fiona McCarthy and J. Colin Hill 2024, Phys. Rev. D, 109, 023528](https://doi.org/10.1103/PhysRevD.109.023528).
+- **CMB-ML simulation framework:** [James Amato, Yunan Xie, Leonel Medina-Varela, et al. 2025, ICCV, 9418–9430](https://doi.org/10.1109/ICCV51701.2025.00879).
+
+The configurations and analysis procedures provided with this release were developed for the following work:
+
+- **D2PS:** Citation forthcoming.
