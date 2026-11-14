@@ -3,12 +3,6 @@ defaults:
   - pipe_model_analysis
   - _self_
 
-# This has neither preprocess nor postprocess. 
-#   Redirect those to make_sims.
-#   TODO: something better
-# preprocess: ${pipeline.make_sims}
-# postprocess: ${pipeline.make_sims}
-
 make_hm_noise:
   assets_out:
     noise_maps:
@@ -24,8 +18,7 @@ make_hm_noise:
     noise_model: {stage: make_noise_models}
     noise_avg:   {stage: make_planck_noise_sims_avgs}
   dir_name: Simulation_E2_HM_Noise
-  splits: &test
-    - test
+  splits: ${splits.run_inference_on}
   make_stage_log: True
 
 make_hm_sims:
@@ -37,7 +30,7 @@ make_hm_sims:
     noise_maps: {stage: make_hm_noise}
     sky_no_noise_maps: {stage: make_obs_no_noise, working: *sw}
   dir_name: Simulation_HM_Maps
-  splits: *test
+  splits: ${splits.run_inference_on}
   make_stage_log: True
   top_level_working: True
 
