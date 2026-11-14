@@ -2,11 +2,14 @@
 This script runs a pipeline for cleaning CMB signal using PyILC.
 
 The pipeline consists of the following steps:
-1. Checking configurations
-2. Creating needed precursor assets (masks)
-3. Generating predictions using PyILC
+1. Creating masks
+2. Generating half-mission noise and observations
+3. Generating foreground debiasing realizations
+4. Computing CNILC weights and predictions
+5. Applying weights to half-mission and foreground maps
+6. Estimating debiased power spectra
 
-Because settings in PyILC cause conflicts for Matplotlib, analysis is performed in `main_pyilc_analysis.py`.
+Because settings in PyILC cause conflicts for Matplotlib, no figure-producing executors should be imported here or errors will result.
 
 The script uses the Hydra library for configuration management.
 
@@ -23,12 +26,10 @@ OmegaConf.register_new_resolver(
 )
 
 
-# from cmbml.utils.check_env_var import validate_environment_variable
 from cmbml.core import (
     PipelineContext,
     LogMaker
     )
-from cmbml.core.A_check_hydra_configs import HydraConfigCheckerExecutor
 from cmbml.sims.ex import (
     MaskCreatorExecutor, 
     HalfMissionNoiseExecutor,
@@ -57,7 +58,6 @@ def main(cfg):
 
     pipeline_context = PipelineContext(cfg, log_maker)
 
-    # pipeline_context.add_pipe(HydraConfigCheckerExecutor)
     pipeline_context.add_pipe(MaskCreatorExecutor)
     pipeline_context.add_pipe(HalfMissionNoiseExecutor)
     pipeline_context.add_pipe(SimHMCreatorExecutor)
