@@ -47,7 +47,6 @@ from cmbml.analysis.ex import (
 
                             # ConvertTheoryPowerSpectrumExecutor,
                             # MakeTheoryPSStats,
-                            # # PyILCMakePSExecutor,
                             # PixelSummaryFigsExecutor,
                             # PowerSpectrumAnalysisExecutor,
                             # PowerSpectrumSummaryExecutor,
@@ -88,7 +87,6 @@ def main(cfg):
     # pipeline_context.add_pipe(MakeTheoryPSStats)  # NOT DONE
 
     # # PyILC's Predictions as Power Spectra Anaylsis
-    # pipeline_context.add_pipe(PyILCMakePSExecutor)  # NOT DONE
     # pipeline_context.add_pipe(PowerSpectrumAnalysisExecutor)  # NOT DONE
     # pipeline_context.add_pipe(PowerSpectrumSummaryExecutor)  # NOT DONE
     # pipeline_context.add_pipe(PowerSpectrumSummaryFigsExecutor)  # NOT DONE
