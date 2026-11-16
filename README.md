@@ -61,6 +61,11 @@ python main_pyilc_predict.py n_infer_cap=12
 
 The default working directory within the dataset is `PyILC_CNILC/`. The resulting power spectra are stored in `PyILC_CNILC/Analysis_K_Power_Spectra/` within the dataset directory. Further post-processing (polynomial fitting) is applied in D2PS.
 
+## Licensing
+
+- **Source code:** [MIT License](LICENSE).
+- **Released model and supporting data assets:** [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE.data). A copy of the license is also available alongside the downloadable assets on Box.
+
 ## Attribution
 
 If you use this repository in your research, please cite the relevant publications:
@@ -68,7 +73,3 @@ If you use this repository in your research, please cite the relevant publicatio
 - **NILC method:** [J. Delabrouille, J.-F. Cardoso, M. Le Jeune, et al. 2009, A&A, 493, 835–857](https://doi.org/10.1051/0004-6361:200810514).
 - **PyILC implementation:** [Fiona McCarthy and J. Colin Hill 2024, Phys. Rev. D, 109, 023528](https://doi.org/10.1103/PhysRevD.109.023528).
 - **CMB-ML simulation framework:** [James Amato, Yunan Xie, Leonel Medina-Varela, et al. 2025, ICCV, 9418–9430](https://doi.org/10.1109/ICCV51701.2025.00879).
-
-The configurations and analysis procedures provided with this release were developed for the following work:
-
-- **D2PS:** Citation forthcoming.
