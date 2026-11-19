@@ -1,0 +1,9 @@
+defaults:
+  - assembly_pyilc_hm
+  - pipe_ps_bundling
+  - pipe_ps_metrics
+  - _self_
+
+bundle_pred:
+  assets_in:
+    ps: {stage: make_pred_ps_with_debias, orig_name: auto_pred}

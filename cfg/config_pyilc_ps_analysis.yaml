@@ -1,0 +1,14 @@
+defaults:
+  - config_pyilc
+  - override pipeline: assembly_pyilc_ps_analysis
+  - _self_
+
+model:
+  cleaning:
+    cleaning_model: PyILC_CNILC
+    do_smooth: true
+    sm_epoch: ""
+    sm_score_ell_max: null
+
+  analysis:
+    lcut: 430
